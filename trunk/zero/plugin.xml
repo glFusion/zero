@@ -1,0 +1,74 @@
+<!-- glFusion plugin.xml for autoinstaller                                                              -->
+
+<!--    more information about the glFusion plugin autoinstallation system can be found at:             -->
+<!--    http://www.glfusion.org/wiki/doku.php/glfusion:development:pluginautoinstall                    -->
+
+<!--    note that for consistency, the plugin distribution archive should be named as follows:          -->
+<!--    <id>-<version>-<glfusionverion>.tgz/zip                                                         -->
+
+<plugin>
+
+    <!-- <id> = (required) plugin ID, establishes name of directories and pi_name value in plugin table -->
+    <!--        the plugin ID must be unique in the context of the installation target                  -->
+    <!--        should be same value as $_XX_CONF['pi_name'] found in <id>.php, where:                  -->
+    <!--        XX = the two letter tag assigned to this plugin                                         -->
+    <!--        <id>.php = a file in the root of the plugin archive used to define plugin global vars   -->
+
+    <id>zero</id>
+
+    <!-- <name> = (required) plugin name, suitable for display, but leave off the work 'Plugin'         -->
+    <!--          should be the same value as $_XX_CONF['pi_display_name'] in <id>.php                  -->
+
+    <name>Zero Function</name>
+
+    <!-- <description> = (optional) plugin description - displayed as info in conjunction with <name>   -->
+
+    <description>Zero Function plugin for glFusion CMS</description>
+
+    <!-- <version> = (required) version of this plugin                                                  -->
+    <!--             should be the same value as $_XX_CONF['pi_version'] in <id>.php                    -->
+
+    <version>1.0.0</version>
+
+    <!-- <glfusionversion> = (required) minimum revision level of glFusion to support this plugin       -->
+    <!--                     should be the same value as $_XX_CONF['gl_version'] in <id>.php            -->
+
+    <glfusionversion>1.1.5</glfusionversion>
+
+    <!-- <phpversion> = minimum version of PHP to support this plugin                                   -->
+
+    <phpversion>4.3.0</phpversion>
+
+    <!-- <url> = URL to site/page where plugin support can be obtained                                  -->
+
+    <url>http://www.usable-web.com</url>
+
+    <!-- <maintainer> =  (optional) name of author/maintainer                                           -->
+
+    <maintainer>Mark A. Howard</maintainer>
+
+    <!-- <requires> = (optional) id(s) of plugins that are required as prerequisite(s) to this plugin   -->
+    <!--              multiple instances of this attribute may exist if there are multiple              -->
+    <!--              plugin id(s) are as they would exist in the pi_name column of the plugins table   -->
+
+    <requires></requires>
+
+    <!-- <dataproxydriver> = (optional) source file name of dataproxy driver                            -->
+    <!--                     used to extract/format data as required for sitemap.xml generation         -->
+    <!--                     file must exist in the /dataproxy direction of the plugin archive          -->
+
+    <dataproxydriver></dataproxydriver>
+
+    <!-- <layout> = (optional) name of the directory to create and copy plugin-specific templates to    -->
+    <!--            directory will be created under the /layout directory and files must exist in the   -->
+    <!--            /themefiles directory of the plugin archive                                         -->
+
+    <layout></layout>
+
+    <!-- <renamedist> = (optional) path/name of a default configuration file that needs to be renamed   -->
+    <!--                the path and file must be specified, eg. /plugin/config.php.dist                -->
+
+    <renamedist></renamedist>
+
+</plugin>
+
