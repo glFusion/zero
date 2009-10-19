@@ -1,12 +1,12 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Zero Plugin for glFusion CMS                                               |
+// | Zero Plugin for the glFusion CMS                                         |
 // +--------------------------------------------------------------------------+
 // | install.php                                                              |
 // |                                                                          |
 // | This file installs and removes the data structures for the plugin        |
 // +--------------------------------------------------------------------------+
-// | place revision tracking tags here                                        |
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2009 by the following authors:                             |
 // |                                                                          |
