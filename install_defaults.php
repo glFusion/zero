@@ -1,6 +1,6 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Zero Plugin for glFusion CMS                                               |
+// | Zero Plugin for the glFusion CMS                                         |
 // +--------------------------------------------------------------------------+
 // | install_defaults.php                                                     |
 // |                                                                          |
@@ -8,7 +8,7 @@
 // | records. These settings are only used during the initial installation    |
 // | and not referenced any more once the plugin is installed.                |
 // +--------------------------------------------------------------------------+
-// | place revision tracking tags here                                        |
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2009 by the following authors:                             |
 // |                                                                          |

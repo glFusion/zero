@@ -1,12 +1,12 @@
 <?php
 // +--------------------------------------------------------------------------+
-// | Zero Plugin for glFusion CMS                                               |
+// | Zero Plugin for the glFusion CMS                                         |
 // +--------------------------------------------------------------------------+
-// | lib-zero.php                                                               |
+// | lib-zero.php                                                             |
 // |                                                                          |
-// | Zero plugin support functions                                              |
+// | Zero plugin support functions                                            |
 // +--------------------------------------------------------------------------+
-// | place revision tracking tags here                                        |
+// | $Id::                                                                   $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2009 by the following authors:                             |
 // |                                                                          |
