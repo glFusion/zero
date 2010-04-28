@@ -66,8 +66,12 @@ if (file_exists ($langfile)) {
 
 // glFusion Plugin API =========================================================
 
-// returns the version of the plugin from the configuration array
-
+/**
+* Called by the plugin admin to display the current plugin code version
+*
+* @return   string  version number
+*
+*/
 function plugin_chkVersion_zero()
 {
     global $_ZZ_CONF;
@@ -75,8 +79,12 @@ function plugin_chkVersion_zero()
     return $_ZZ_CONF['pi_version'];
 }
 
-// returns a URL to an icon that is specific to this plugin (max: 50x50 px)
-
+/**
+* Returns the URL of the plugin's icon
+*
+* @return   string      URL of the icon (max 50x50)
+*
+*/
 function plugin_geticon_zero()
 {
     global $_CONF;
@@ -85,10 +93,16 @@ function plugin_geticon_zero()
     return $retval;
 }
 
-// plugin upgrade function - uses zero_upgrade() function in upgrade.php which
-// is located in the plugin root.  if no upgrade file is found, then we display
-// a message indicating that the upgrade function is not implemented
-
+/**
+* Update the Links plugin
+*
+* @return   int     Number of message to display (true = generic success msg)
+*
+* plugin upgrade function - uses zero_upgrade() function in upgrade.php which
+* is located in the plugin root.  if no upgrade file is found, then we display
+* a message indicating that the upgrade function is not implemented
+*
+*/
 function plugin_upgrade_zero()
 {
     global $_CONF, $_TABLES, $_ZZ_CONF, $_DB_table_prefix;
@@ -102,8 +116,15 @@ function plugin_upgrade_zero()
     }
 }
 
-// adds a menu item which allows navigation to this plugin page
-
+/**
+* Returns the items for this plugin that should appear on the main menu
+*
+* NOTE: this MUST return the url/value pairs in the following format
+* $<arrayname>[<label>] = <url>
+*
+* @return   mixed   menu entry, or boolean false if disabled / hidden
+*
+*/
 function plugin_getmenuitems_zero()
 {
     global $_CONF, $LANG_ZZ00;
@@ -112,9 +133,49 @@ function plugin_getmenuitems_zero()
     return $menuitems;
 }
 
-// this is where you can insert your phpblock functions (if any)
-// here is our simple phpblock example
+/**
+* This will put an option for links in the command and control block on
+* moderation.php
+*
+* @return   mixed   array(title, url, icon), or boolean false when not allowed
+*
+*/
+function plugin_cclabel_zero()
+{
+    global $_CONF, $LANG_ZZ00;
 
+    if (SEC_hasRights ('zero.edit')) {
+        return array ($LANG_ZZ00['adminlabel'],
+                      $_CONF['site_admin_url'] . '/plugins/zero/index.php',
+                      plugin_geticon_zero());
+    }
+
+    return false;
+}
+
+/**
+* returns the administrative option for this plugin
+*
+* @return   mixed   array(title, url, num. links), or void when not allowed
+*
+*/
+function plugin_getadminoption_zero()
+{
+    global $_CONF, $_TABLES, $LANG_LINKS;
+
+    if (SEC_hasRights('zero.edit')) {
+        $total_items = 0;  // set this value to the number of items in your db
+        return array ($LANG_ZZ00['adminlabel'],
+                      $_CONF['site_admin_url'] . '/plugins/zero/index.php',
+                      $total_items);
+    }
+}
+
+/**
+ * This is our simple phpblock example which is inserted into the database
+ * during the installation process
+ * 
+ */
 function phpblock_zero()
 {
     $retval = "This block does absolutely nothing.<br />";

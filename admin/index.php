@@ -2,11 +2,11 @@
 // +--------------------------------------------------------------------------+
 // | Zero Plugin for the glFusion CMS                                         |
 // +--------------------------------------------------------------------------+
-// | english_utf-8.php                                                        |
+// | index.php                                                                |
 // |                                                                          |
-// | English language file                                                    |
+// | Zero plugin administration page                                          |
 // +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
+// | $Id:: index.php 11 2010-04-28 21:11:32Z usableweb                       $|
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2009 by the following authors:                             |
 // |                                                                          |
@@ -31,38 +31,35 @@
 // |                                                                          |
 // +--------------------------------------------------------------------------+
 
-// this file may not be retrieved directly by a browser
+require_once '../../../lib-common.php';
+require_once '../../auth.inc.php';
 
-if (!defined ('GVERSION')) {
-    die ('This file can not be used on its own.');
+// load the plugin-specific functions, as well as a basic user check.  anonymous
+// users will be sent to the login page.  users in the 'Zero Users' group will
+// see a short message.  see the code at the beginning of lib-zero.php
+
+require_once $_CONF['path'].'plugins/zero/include/lib-zero.php';
+
+$display = '';
+
+if(!SEC_hasRights('zero.admin')) {
+    $display .= COM_siteHeader ('menu', $MESSAGE[30]);
+    $display .= COM_startBlock ($MESSAGE[30], '',
+                                COM_getBlockTemplate ('_msg_block', 'header'));
+    $display .= $MESSAGE[34];
+    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
+    $display .= COM_siteFooter ();
+    COM_accessLog ("User {$_USER['username']} tried to illegally access the zero administration screen.");
+    echo $display;
+    exit;
 }
 
-// use this file to localize your plugin
+$display = COM_siteHeader('menu',$LANG_ZZ00['title'])
+    . '<strong>' . $LANG_ZZ00['title'].'</strong><br /><br />This is the Zero Plugin Administrative page.<br /><br />'
+    . 'Widgets per Page = '.$_ZZ_CONF['widgets_per_page'].'<br />'
+    . 'Gadgets per Page = '.$_ZZ_CONF['gadgets_per_page'].'<br />'
+    . COM_siteFooter();
 
-$LANG_ZZ00 = array (
-    'plugin'            => 'zero',
-    'title'             => 'Zero Function',
-    'menulabel'         => 'Zero',
-    'adminlabel'        => 'Zero Admin',
-    'error'             => ' Error',
-);
-
-// configuration UI localization
-
-$LANG_configsections['zero'] = array(
-    'label'                 => 'Zero Function',
-    'title'                 => 'Zero Function Configuration'
-);
-$LANG_confignames['zero'] = array(
-    'widgets_per_page'     => 'Widgets per page',
-    'gadgets_per_page'     => 'Gadgets per page',
-);
-$LANG_configsubgroups['zero'] = array(
-    'sg_main'               => 'Main Settings',
-);
-
-$LANG_fs['zero'] = array(
-    'zero_general'            => 'Zero Function General Settings',
-);
+echo $display;
 
 ?>

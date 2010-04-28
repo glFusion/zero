@@ -43,6 +43,7 @@ $LANG_ZZ00 = array (
     'plugin'            => 'zero',
     'title'             => 'Zero Function',
     'menulabel'         => 'Zero',
+    'adminlabel'        => 'Zero Admin',
     'error'             => ' Error',
 );
 
