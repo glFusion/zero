@@ -49,7 +49,7 @@ if (COM_isAnonUser()) {
     exit;
 }
 
-if (!SEC_hasRights('zero.user')) {
+if (!SEC_hasRights('zero.view')) {
     echo COM_refresh($_CONF['site_url']);
     exit;
 }

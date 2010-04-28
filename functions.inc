@@ -161,7 +161,7 @@ function plugin_cclabel_zero()
 */
 function plugin_getadminoption_zero()
 {
-    global $_CONF, $_TABLES, $LANG_LINKS;
+    global $_CONF, $LANG_ZZ00;
 
     if (SEC_hasRights('zero.edit')) {
         $total_items = 0;  // set this value to the number of items in your db
@@ -174,7 +174,7 @@ function plugin_getadminoption_zero()
 /**
  * This is our simple phpblock example which is inserted into the database
  * during the installation process
- * 
+ *
  */
 function phpblock_zero()
 {

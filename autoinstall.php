@@ -79,7 +79,7 @@ $INSTALL_plugin['zero'] = array(
     array('type' => 'table', 'table' => $_TABLES['gadgets'], 'sql' => $_SQL['gadgets']),
 
     array('type' => 'group', 'group' => 'Zero Admin', 'desc' => 'Administrators of the Zero Plugin',
-            'variable' => 'admin_group_id', 'addroot' => true),
+            'variable' => 'admin_group_id', 'admin' => true, 'addroot' => true),
     array('type' => 'group', 'group' => 'Zero Users', 'desc' => 'Users of the Zero Plugin',
             'variable' => 'user_group_id', 'addroot' => true),
 
