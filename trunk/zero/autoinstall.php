@@ -83,9 +83,9 @@ $INSTALL_plugin['zero'] = array(
     array('type' => 'group', 'group' => 'Zero Users', 'desc' => 'Users of the Zero Plugin',
             'variable' => 'user_group_id', 'addroot' => true),
 
-    array('type' => 'feature', 'feature' => 'zero.admin', 'desc' => 'Ability to administer the Zero plugin',
+    array('type' => 'feature', 'feature' => 'zero.edit', 'desc' => 'Ability to administer the Zero plugin',
             'variable' => 'admin_feature_id'),
-    array('type' => 'feature', 'feature' => 'zero.user', 'desc' => 'Zero User',
+    array('type' => 'feature', 'feature' => 'zero.view', 'desc' => 'Zero User',
             'variable' => 'user_feature_id'),
 
     array('type' => 'mapping', 'group' => 'admin_group_id', 'feature' => 'admin_feature_id',
@@ -148,7 +148,7 @@ function plugin_autouninstall_zero()
         /* give the full name of the group, as in the db */
         'groups' => array('Zero Admin','Zero Users'),
         /* give the full name of the feature, as in the db */
-        'features' => array('zero.admin','zero.user'),
+        'features' => array('zero.edit','zero.user'),
         /* give the full name of the block, including 'phpblock_', etc */
         'php_blocks' => array( 'phpblock_zero' ),
         /* give all vars with their name */
