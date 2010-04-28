@@ -72,7 +72,7 @@ require_once $_CONF['path'].'plugins/zero/sql/' . $_DB_dbms . '_install.php';
 $INSTALL_plugin['zero'] = array(
     'installer' => array('type' => 'installer', 'version' => '1', 'mode' => 'install'),
     'plugin' => array('type' => 'plugin', 'name' => $_ZZ_CONF['pi_name'],
-            'ver' => $_ZZ_CONF['pi_version'], 'gl_ver' => $_ZZ_CONF['gl_version'],
+            'ver' => $_ZZ_CONF['pi_version'], 'gl_ver' => $_ZZ_CONF['pi_gl_version'],
             'url' => $_ZZ_CONF['pi_url'], 'display' => $_ZZ_CONF['pi_display_name']),
 
     array('type' => 'table', 'table' => $_TABLES['widgets'], 'sql' => $_SQL['widgets']),
@@ -110,7 +110,7 @@ function plugin_install_zero()
     $pi_display_name    = $_ZZ_CONF['pi_display_name'];
     $pi_version         = $_ZZ_CONF['pi_version'];
 
-    COM_errorLog("Attempting to install the $pi_name v$pi_version ($pi_display_name) plugin", 1);
+    COM_errorLog("Attempting to install the $pi_name v$pi_version ($pi_display_name) plugin");
     return (INSTALLER_install($INSTALL_plugin[$pi_name]) > 0) ? false : true;
 
 }
