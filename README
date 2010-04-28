@@ -1,5 +1,5 @@
 Zero Function Plugin for the glFusion CMS
-Version: 1.0.0
+Version: 1.1.0
 
 
 OVERVIEW
@@ -34,7 +34,7 @@ Let's say you're building a plugin to manage recipes, and let's call it the
 strings, which of course have to be edited appropriately:
 
 'zero'  the base name of the plugin  edit to: 'recipe'
-'zz'    var/function name 'tag'      edit to: 'rm'
+'ZZ'    var/function name 'tag'      edit to: 'RM'
 
 Now rename the following files (as a minimum):
 

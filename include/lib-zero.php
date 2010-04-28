@@ -44,11 +44,12 @@ if (!defined ('GVERSION')) {
 
 // only allow logged-in users or users who have the zero.user permission
 
-if ( COM_isAnonUser() ) {
+if (COM_isAnonUser()) {
     echo COM_refresh($_CONF['site_url'].'/users.php');
     exit;
 }
-if ( !SEC_hasRights('zero.user') ) {
+
+if (!SEC_hasRights('zero.user')) {
     echo COM_refresh($_CONF['site_url']);
     exit;
 }
@@ -61,7 +62,7 @@ if ( !SEC_hasRights('zero.user') ) {
 // in the example here, we have included a function which displays an error
 // message in an alert box
 
-function ZERO_alertMessage( $alertText = '' )
+function ZERO_alertMessage($alertText = '')
 {
     global $_CONF, $_ZZ_CONF, $LANG_ZZ00;
 
@@ -77,8 +78,10 @@ function ZERO_alertMessage( $alertText = '' )
     $display .= $T->finish ($T->get_var('output'));
 
     $display .= COM_siteFooter();
+
     echo $display;
-    exit;
+
+    return;
 }
 
 

@@ -39,13 +39,13 @@ if (!defined ('GVERSION')) {
 
 // this code creates the plugin-specific tables.  these are just examples
 
-$_SQL['zz_widgets'] = "CREATE TABLE {$_TABLES['zz_widgets']} (
+$_SQL['widgets'] = "CREATE TABLE {$_TABLES['widgets']} (
   widget_id mediumint(8) NOT NULL auto_increment,
   widget_desc varchar(64) NOT NULL default '',
   PRIMARY KEY (widget_id)
 ) TYPE=MyISAM;";
 
-$_SQL['zz_gadgets'] = "CREATE TABLE {$_TABLES['zz_gadgets']} (
+$_SQL['gadgets'] = "CREATE TABLE {$_TABLES['gadgets']} (
   gadget_id mediumint(8) NOT NULL auto_increment,
   gadget_desc varchar(64) NOT NULL default '',
   PRIMARY KEY (gadget_id)

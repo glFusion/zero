@@ -42,7 +42,7 @@ if (!defined ('GVERSION')) {
 $LANG_ZZ00 = array (
     'plugin'            => 'zero',
     'title'             => 'Zero Function',
-    'menulabel'              => 'Zero',
+    'menulabel'         => 'Zero',
     'error'             => ' Error',
 );
 

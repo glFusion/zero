@@ -37,7 +37,7 @@
 
 // this file may not be retrieved directly by a browser
 
-if (!defined ('GVERSION')) {
+if (!defined('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
@@ -49,8 +49,8 @@ if (!defined ('GVERSION')) {
 
 $_ZZ_CONF['pi_name']            = 'zero';
 $_ZZ_CONF['pi_display_name']    = 'Zero Function';
-$_ZZ_CONF['pi_version']         = '1.0.0';
-$_ZZ_CONF['gl_version']         = '1.1.5';
+$_ZZ_CONF['pi_version']         = '1.1.0';
+$_ZZ_CONF['pi_gl_version']      = '1.2.0';
 $_ZZ_CONF['pi_url']             = 'http://www.usable-web.com';
 
 // here is where you define tables that are specific to your plugin.  assigning
@@ -58,12 +58,12 @@ $_ZZ_CONF['pi_url']             = 'http://www.usable-web.com';
 // with your database, and also further ensures that you don't accidentally conflict
 // with a glFusion 'core' table
 
-$_ZZ_table_prefix = $_DB_table_prefix . 'zz_';
+$_ZZ_table_prefix = strtolower($_DB_table_prefix . 'ZZ_');
 
 // make your plugin-specific tables known to glFusion so that they are handled
 // properly.  to do this, add them to the global $_TABLES array.  the 'widgets'
 // and 'gadgets' tables are shown here as examples
 
-$_TABLES['zz_widgets']         = $_ZZ_table_prefix . 'widgets';
-$_TABLES['zz_gadgets']         = $_ZZ_table_prefix . 'gadgets';
+$_TABLES['widgets']         = $_ZZ_table_prefix . 'widgets';
+$_TABLES['gadgets']         = $_ZZ_table_prefix . 'gadgets';
 ?>
