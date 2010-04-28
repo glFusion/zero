@@ -43,16 +43,16 @@ if (!defined('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-// retrieve global config vars and table names specific to this plugin
-
-require_once $_CONF['path'].'plugins/zero/zero.php';
-
 // use glFusion's config API to retrieve the configurable values and constants
 // that are specific to this plugin from the glFusion database
 
 require_once $_CONF['path_system'] . 'classes/config.class.php';
 $config = config::get_instance();
 $_ZZ_CONF = $config->get_config('zero');
+
+// retrieve global config vars and table names specific to this plugin
+
+require_once $_CONF['path'].'plugins/zero/zero.php';
 
 // load our language file, defaults to english if a language file that relates
 // to the system-wide or user default is not found

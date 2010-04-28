@@ -68,7 +68,7 @@ $action = (isset($_GET['action'])) ? COM_applyFilter($_GET['action']) : '';
 // setup some url's, and default exit to plugin admin panel
 
 $site_admin_url = $_CONF['site_admin_url'] . '/index.php';
-$plugin_admin_url = $_CONF['site_admin_url'] . 'plugins.php?msg=';
+$plugin_admin_url = $_CONF['site_admin_url'] . '/plugins.php?msg=';
 $display = COM_refresh($plugin_admin_url);
 
 // perform the desired action
