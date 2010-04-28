@@ -37,12 +37,16 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+// glFusion currently only supports mySQL at the time of this writing, however
+// this global can in the future allow for multiple database engine types
+
 global $_DB_dbms;
 
-// load the plugin-specific constants, and dbms-specific installation scripts
-
+// load the plugin-specific constants
 require_once $_CONF['path'].'plugins/zero/zero.php';
-require_once $_CONF['path'].'plugins/zero/sql/'.$_DB_dbms.'_install.php';
+
+// include the plugin-specific SQL installation script
+require_once $_CONF['path'].'plugins/zero/sql/' . $_DB_dbms . '_install.php';
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |
@@ -57,7 +61,7 @@ require_once $_CONF['path'].'plugins/zero/sql/'.$_DB_dbms.'_install.php';
 //
 // in the example below, we are defining:
 //
-//  1) the version of this structure to lib-install, in case it changes in the future
+//  1) the version of this structure, in case it changes in the future (currently: 1)
 //  2) the plugin name, minimum glFusion version, support URL and displayable name
 //  3) the tables that are to be installed that are specific to this plugin
 //  4) 'admin' and 'user' groups and features that are associated with this plugin
@@ -71,8 +75,8 @@ $INSTALL_plugin['zero'] = array(
             'ver' => $_ZZ_CONF['pi_version'], 'gl_ver' => $_ZZ_CONF['gl_version'],
             'url' => $_ZZ_CONF['pi_url'], 'display' => $_ZZ_CONF['pi_display_name']),
 
-    array('type' => 'table', 'table' => $_TABLES['zz_widgets'], 'sql' => $_SQL['zz_widgets']),
-    array('type' => 'table', 'table' => $_TABLES['zz_gadgets'], 'sql' => $_SQL['zz_gadgets']),
+    array('type' => 'table', 'table' => $_TABLES['widgets'], 'sql' => $_SQL['widgets']),
+    array('type' => 'table', 'table' => $_TABLES['gadgets'], 'sql' => $_SQL['gadgets']),
 
     array('type' => 'group', 'group' => 'Zero Admin', 'desc' => 'Administrators of the Zero Plugin',
             'variable' => 'admin_group_id', 'addroot' => true),
@@ -106,17 +110,18 @@ function plugin_install_zero()
     $pi_display_name    = $_ZZ_CONF['pi_display_name'];
     $pi_version         = $_ZZ_CONF['pi_version'];
 
-    COM_errorLog("Attempting to install the $pi_display_name plugin", 1);
+    COM_errorLog("Attempting to install the $pi_name v$pi_version ($pi_display_name) plugin", 1);
+    return (INSTALLER_install($INSTALL_plugin[$pi_name]) > 0) ? false : true;
 
-    $ret = INSTALLER_install($INSTALL_plugin[$pi_name]);
-    if ($ret > 0) {
-        return false;
-    }
-
-    return true;
 }
 
-// loads the configuration records for this plugin
+// this function is a called back from INSTALLER_install() in lib-plugin to
+// initialize the configuration data structure for the plugin.  it performs a
+// further call back to plugin_initconfig_xxxx in install_defaults.php in order
+// to establish initial/default config values.  this is only done once, during
+// plugin installation, once your plugin is installed it will retrieve it's
+// configuration information from the glFusion configuration table(s) using
+// the config API, eg. $config->get_config('xxxx')
 
 function plugin_load_configuration_zero()
 {
@@ -125,6 +130,7 @@ function plugin_load_configuration_zero()
     require_once $_CONF['path'] . 'plugins/zero/install_defaults.php';
 
     return plugin_initconfig_zero();
+
 }
 
 // this function permits the plugin to be uninstalled
@@ -134,12 +140,11 @@ function plugin_load_configuration_zero()
 // this code can perform special actions that cannot be oreseen by the core code
 // (interactions with other plugins for example)
 
-function plugin_autouninstall_zero ()
+function plugin_autouninstall_zero()
 {
-    $out = array (
+    $retval = array (
         /* give the name of the tables, without $_TABLES[] */
-        'tables' => array ( 'zz_widgets',
-						    'zz_gadgets'),
+        'tables' => array ( 'widgets', 'gadgets'),
         /* give the full name of the group, as in the db */
         'groups' => array('Zero Admin','Zero Users'),
         /* give the full name of the feature, as in the db */
@@ -149,6 +154,6 @@ function plugin_autouninstall_zero ()
         /* give all vars with their name */
         'vars'=> array()
     );
-    return $out;
+    return $retval;
 }
 ?>

@@ -45,25 +45,32 @@ if (!defined ('GVERSION')) {
 // configuration records. these values are only used during the initial
 // installation and are not referenced again once the plugin is installed
 
-global $CONF_ZZ_DEFAULT;
-$CONF_ZZ_DEFAULT = array();
+global $_ZZ_CONF_DEFAULT;
+$_ZZ_CONF_DEFAULT = array();
 
-$CONF_ZZ_DEFAULT['widgets_per_page'] = 4;
-$CONF_ZZ_DEFAULT['gadgets_per_page'] = 8;
+$_ZZ_CONF_DEFAULT['widgets_per_page'] = 4;
+$_ZZ_CONF_DEFAULT['gadgets_per_page'] = 8;
 
 // initialize zero plugin configuration
 
 // this function reates the database entries for the configuation entries
-// that are specific to this plugin if they don't already exist
+// that are specific to this plugin if they don't already exist.  this function
+// is called primarily from two places:
+//
+// 1) from autoinstall.php, in the plugin_load_configuration_xxxx function, to
+//    return the default config values to the plugin installation function
+//
+// 2) from upgrade.php, if the version upgrade is moving what was static config
+//    data (in a config.php, for example) into the config database
 
 function plugin_initconfig_zero()
 {
-    global $_ZZ_CONF, $CONF_ZZ_DEFAULT;
+    global $_ZZ_CONF, $_ZZ_CONF_DEFAULT;
 
     // this merges the config values with default override values
 
     if (is_array($_ZZ_CONF) && (count($_ZZ_CONF) > 1)) {
-        $CONF_ZZ_DEFAULT = array_merge($CONF_ZZ_DEFAULT, $_ZZ_CONF);
+        $_ZZ_CONF_DEFAULT = array_merge($_ZZ_CONF_DEFAULT, $_ZZ_CONF);
     }
 
     // get the configuration instance, and create the zero plugin
@@ -78,10 +85,10 @@ function plugin_initconfig_zero()
         $c->add('sg_main', NULL, 'subgroup', 0, 0, NULL, 0, true, 'zero');
         $c->add('zero_general', NULL, 'fieldset', 0, 0, NULL, 0, true, 'zero');
 
-        $c->add('widgets_per_page',$CONF_ZZ_DEFAULT['widgets_per_page'], 'text',
+        $c->add('widgets_per_page',$_ZZ_CONF_DEFAULT['widgets_per_page'], 'text',
                 0, 0, NULL, 10, true, 'zero');
 
-        $c->add('gadgets_per_page',$CONF_ZZ_DEFAULT['gadgets_per_page'], 'text',
+        $c->add('gadgets_per_page',$_ZZ_CONF_DEFAULT['gadgets_per_page'], 'text',
                 0, 0, NULL, 20, true, 'zero');
     }
     return true;

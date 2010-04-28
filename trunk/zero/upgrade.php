@@ -33,16 +33,17 @@
 
 // this file may not be retrieved directly by a browser
 
-if (!defined ('GVERSION')) {
+if (!defined('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-// this function is called by lib-plugin whenever the 'Upgrade' option is
+// this function is called back from functions.inc whenever the 'Upgrade' option is
 // selected in the Plugin Administration screen for this plugin.  from here
 // any incremental modifications to the installation can be made, including:
 //
 //  1) adding/modifying/deleting SQL
 //  2) adding/replacing/deleting files
+//  3) adding/removing/modifying config database vars/values
 //
 // after the upgrade process, the template cache is cleared in case CSS or
 // templates changed.  note that when you first release your plugin, this
@@ -56,33 +57,35 @@ function zero_upgrade()
     $currentVersion = DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='zero'");
 
     switch ($currentVersion) {
+
         case '0.0.5' :
-            $_SQL['zz_widgets'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['zz_widgets']} (
+            $_SQL['widgets'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['widgets']} (
                 widget_id mediumint(8) NOT NULL auto_increment,
                 widget_desc varchar(64) NOT NULL default '',
                 PRIMARY KEY (widget_id)
                 ) TYPE=MyISAM;";
-            DB_query($_SQL['zz_widgets'],1);
+            DB_query($_SQL['widgets'],1);
+
         case '0.0.6' :
-            $_SQL['zz_gadgets'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['zz_gadgets']} (
+            $_SQL['gadgets'] = "CREATE TABLE IF NOT EXISTS {$_TABLES['gadgets']} (
                 gadget_id mediumint(8) NOT NULL auto_increment,
                 gadget_desc varchar(64) NOT NULL default '',
                 PRIMARY KEY (gadget_id)
                 ) TYPE=MyISAM;";
-            DB_query($_SQL['zz_gadgets'],1);
-        case '1.0.0' :
+            DB_query($_SQL['gadgets'],1);
 
+        case '1.0.0' :
+        case '1.1.0' :
         default:
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='".$_ZZ_CONF['pi_version']."',pi_gl_version='".$_ZZ_CONF['gl_version']."' WHERE pi_name='zero' LIMIT 1");
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='{$_ZZ_CONF['pi_version']}',pi_gl_version='{$_ZZ_CONF['pi_gl_version']}' WHERE pi_name='zero' LIMIT 1");
             break;
     }
 
+    // clear the template cache because this plugin may create changes
     CTL_clearCache();
 
-    if ( DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='zero'") == $_ZZ_CONF['pi_version']) {
-        return true;
-    } else {
-        return false;
-    }
+    // if upgrade succeeded, the plugin version in the plugins table will match
+    // the version of the currently installed plugin
+    return DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='zero'") == $_ZZ_CONF['pi_version'];
 }
 ?>

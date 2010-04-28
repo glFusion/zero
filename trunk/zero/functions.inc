@@ -31,23 +31,28 @@
 // |                                                                          |
 // +------------------------------------------------------------------------
 
+// this is the plugin-specific function list which implements the glFusion
+// plugin API for your plugin.  please be careful about what you put into this
+// file, because when you plugin is enabled, it is loaded by lib-common into
+// memory for use by glFusion.  as such, only functions which are needed by
+// glFusion core should exist in this file
+
 // this file may not be retrieved directly by a browser
 
-if (!defined ('GVERSION')) {
+if (!defined('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-// retrieve the configurable values and constants that are plugin-specific
-
-// configuration values
-
-require_once $_CONF['path_system'] . 'classes/config.class.php';
-$zz_config = config::get_instance();
-$_ZZ_CONF = $zz_config->get_config('zero');
-
-// constants
+// retrieve global config vars and table names specific to this plugin
 
 require_once $_CONF['path'].'plugins/zero/zero.php';
+
+// use glFusion's config API to retrieve the configurable values and constants
+// that are specific to this plugin from the glFusion database
+
+require_once $_CONF['path_system'] . 'classes/config.class.php';
+$config = config::get_instance();
+$_ZZ_CONF = $config->get_config('zero');
 
 // load our language file, defaults to english if a language file that relates
 // to the system-wide or user default is not found
@@ -59,11 +64,12 @@ if (file_exists ($langfile)) {
     require_once $_CONF['path'].'plugins/zero/language/english.php';
 }
 
-// this is where you will insert functions that implement the glFusion plugin API
+// glFusion Plugin API =========================================================
 
 // returns the version of the plugin from the configuration array
 
-function plugin_chkVersion_zero() {
+function plugin_chkVersion_zero()
+{
     global $_ZZ_CONF;
 
     return $_ZZ_CONF['pi_version'];
@@ -71,7 +77,8 @@ function plugin_chkVersion_zero() {
 
 // returns a URL to an icon that is specific to this plugin (max: 50x50 px)
 
-function plugin_geticon_zero() {
+function plugin_geticon_zero()
+{
     global $_CONF;
 
     $retval = $_CONF['site_url'].'/zero/images/zero.jpg';
@@ -79,9 +86,11 @@ function plugin_geticon_zero() {
 }
 
 // plugin upgrade function - uses zero_upgrade() function in upgrade.php which
-// is located in the plugin root
+// is located in the plugin root.  if no upgrade file is found, then we display
+// a message indicating that the upgrade function is not implemented
 
-function plugin_upgrade_zero(){
+function plugin_upgrade_zero()
+{
     global $_CONF, $_TABLES, $_ZZ_CONF, $_DB_table_prefix;
 
     if ( @file_exists($_CONF['path'].'plugins/zero/upgrade.php') ) {
@@ -95,7 +104,8 @@ function plugin_upgrade_zero(){
 
 // adds a menu item which allows navigation to this plugin page
 
-function plugin_getmenuitems_zero(){
+function plugin_getmenuitems_zero()
+{
     global $_CONF, $LANG_ZZ00;
     $menuitems = array();
     $menuitems["$LANG_ZZ00[menulabel]"] = $_CONF['site_url']."/zero/index.php";
@@ -105,7 +115,8 @@ function plugin_getmenuitems_zero(){
 // this is where you can insert your phpblock functions (if any)
 // here is our simple phpblock example
 
-function phpblock_zero() {
+function phpblock_zero()
+{
     $retval = "This block does absolutely nothing.<br />";
     return $retval;
 }

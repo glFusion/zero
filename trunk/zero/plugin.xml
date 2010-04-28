@@ -33,7 +33,7 @@
     <!-- <glfusionversion> = (required) minimum revision level of glFusion to support this plugin       -->
     <!--                     should be the same value as $_XX_CONF['gl_version'] in <id>.php            -->
 
-    <glfusionversion>1.1.5</glfusionversion>
+    <glfusionversion>1.2.0</glfusionversion>
 
     <!-- <phpversion> = minimum version of PHP to support this plugin                                   -->
 
@@ -71,4 +71,3 @@
     <renamedist></renamedist>
 
 </plugin>
-
