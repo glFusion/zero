@@ -45,6 +45,11 @@ $LANG_ZZ00 = array (
     'menulabel'         => 'Zero',
     'adminlabel'        => 'Zero Admin',
     'error'             => ' Error',
+    'widgets'           => 'Widgets per Page: ',
+    'gadgets'           => 'Gadgets per Page: ',
+    'accessdenied'      => 'Sorry, you do not have access to the Zero Plugin Administration page.',
+    'publicpage'        => "<br /><br />This is the Zero Plugin public index page.<br /><br />This would be the initial 'home page' that is displayed for non-admin users of your plugin.<br /><br />",
+    'adminpage'         => "<br /><br />This is the Zero Plugin administrative page.<br /><br />This is the page that would contain what is needed for administrators to manage this plugin.<br /><br/>"
 );
 
 // configuration UI localization
