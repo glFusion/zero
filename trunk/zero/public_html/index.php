@@ -52,9 +52,10 @@ require_once $_CONF['path'].'plugins/zero/include/lib-zero.php';
 // start of main code
 
 $display = COM_siteHeader('menu',$LANG_ZZ00['title'])
-    . '<strong>' . $LANG_ZZ00['title'].'</strong><br /><br />This plugin provides zero function.<br /><br />'
-    . 'Widgets per Page = '.$_ZZ_CONF['widgets_per_page'].'<br />'
-    . 'Gadgets per Page = '.$_ZZ_CONF['gadgets_per_page'].'<br />'
+    . '<strong>' . $LANG_ZZ00['title'].'</strong>'
+    . $LANG_ZZ00['publicpage']
+    . $LANG_ZZ00['widgets'] . $_ZZ_CONF['widgets_per_page'].'<br />'
+    . $LANG_ZZ00['gadgets'] . $_ZZ_CONF['gadgets_per_page'].'<br />'
     . COM_siteFooter();
 
 echo $display;

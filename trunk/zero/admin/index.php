@@ -42,11 +42,11 @@ require_once $_CONF['path'].'plugins/zero/include/lib-zero.php';
 
 $display = '';
 
-if(!SEC_hasRights('zero.admin')) {
+if(!SEC_hasRights('zero.edit')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_startBlock ($MESSAGE[30], '',
                                 COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $MESSAGE[34];
+    $display .= $LANG_ZZ00['accessdenied'];
     $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     $display .= COM_siteFooter ();
     COM_accessLog ("User {$_USER['username']} tried to illegally access the zero administration screen.");
@@ -55,9 +55,10 @@ if(!SEC_hasRights('zero.admin')) {
 }
 
 $display = COM_siteHeader('menu',$LANG_ZZ00['title'])
-    . '<strong>' . $LANG_ZZ00['title'].'</strong><br /><br />This is the Zero Plugin Administrative page.<br /><br />'
-    . 'Widgets per Page = '.$_ZZ_CONF['widgets_per_page'].'<br />'
-    . 'Gadgets per Page = '.$_ZZ_CONF['gadgets_per_page'].'<br />'
+    . '<strong>' . $LANG_ZZ00['title'].'</strong>'
+    . $LANG_ZZ00['adminpage']
+    . $LANG_ZZ00['widgets'] . $_ZZ_CONF['widgets_per_page'].'<br />'
+    . $LANG_ZZ00['gadgets'] . $_ZZ_CONF['gadgets_per_page'].'<br />'
     . COM_siteFooter();
 
 echo $display;
