@@ -72,11 +72,10 @@ $action = (isset($_GET['action'])) ? COM_applyFilter($_GET['action']) : '';
 // setup refresh url's
 
 $site_admin_url = $_CONF['site_admin_url'] . '/index.php';
-$plugin_admin_url = $_CONF['site_admin_url'] . '/plugins.php?msg=';
 
-// default url to refresh to
+// default refresh url
 
-$display = COM_refresh($plugin_admin_url);
+$url = $_CONF['site_admin_url'] . '/plugins.php?msg=';
 
 // default suffix for error msg
 
@@ -88,7 +87,8 @@ switch ($action) {
 
     case 'install':
 	if ($validtoken) {
-	    $display .= (plugin_install_zero()) ? '44' : '72';
+	    $url .= (plugin_install_zero()) ? '44' : '72';
+	    $display = COM_refresh($url);
 	} else {
 	    COM_accessLog("CSRF authentication failure during Zero Plugin Installation" . $errmsg, 1);
             $display = COM_refresh($site_admin_url);
@@ -97,7 +97,8 @@ switch ($action) {
 
     case 'uninstall':
 	if ($validtoken) {
-	    $display .= (plugin_uninstall_zero('installed')) ? '45' : '73';
+	    $url .= (plugin_uninstall_zero('installed')) ? '45' : '73';
+	    $display = COM_refresh($url);
 	} else {
 	    COM_accessLog("CSRF authentication failure during Zero Plugin UnInstallation" . $errmsg, 1);
             $display = COM_refresh($site_admin_url);
