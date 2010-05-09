@@ -47,11 +47,15 @@ if (!defined('GVERSION')) {
 // conflict with other glFusion core or plugin global constants or tables that
 // may be already defined
 
+// static constants for this plugin
+
 $_ZZ_CONF['pi_name']            = 'zero';
 $_ZZ_CONF['pi_display_name']    = 'Zero Function';
-$_ZZ_CONF['pi_version']         = '1.1.0';
+$_ZZ_CONF['pi_version']         = '1.1.1';
 $_ZZ_CONF['pi_gl_version']      = '1.2.0';
 $_ZZ_CONF['pi_url']             = 'http://www.usable-web.com';
+
+// tables specific to this plugin
 
 // here is where you define tables that are specific to your plugin.  assigning
 // a plugin-specific table prefix helps locate the tables easily when working
@@ -66,4 +70,5 @@ $_ZZ_table_prefix = strtolower($_DB_table_prefix . 'ZZ_');
 
 $_TABLES['widgets']         = $_ZZ_table_prefix . 'widgets';
 $_TABLES['gadgets']         = $_ZZ_table_prefix . 'gadgets';
+
 ?>

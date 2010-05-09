@@ -74,7 +74,13 @@ function zero_upgrade()
                 ) TYPE=MyISAM;";
             DB_query($_SQL['gadgets'],1);
 
+        // you should really list a case for each version you release, however
+        // the default case is the catch-all, which just updates pi_version to
+        // match the current code version
+        
         case '1.0.0' :
+        case '1.1.0' :
+        case '1.1.1' :
         default:
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='{$_ZZ_CONF['pi_version']}',pi_gl_version='{$_ZZ_CONF['pi_gl_version']}' WHERE pi_name='zero' LIMIT 1");
             break;
