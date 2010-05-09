@@ -84,5 +84,38 @@ function ZERO_alertMessage($alertText = '')
     return;
 }
 
+// here is a handy function which you can use to find the template files that
+// are associated with your plugin.  this function will attempt to find the
+// relevant templates in your layout directory, but if you have not elected to
+// copy the files there during installation, it will default to the 'templates'
+// directory located in the plugin root directory.  note that this function will
+// take a single parameter, which allows you to define one or more subdir's to
+// contain templates for your administrative interface, or possibly different
+// sections of the plugin
+
+// return a path to the template files
+
+function ZERO_templatePath($path = '')
+{
+    global $_CONF;
+
+    if (empty($path)) {
+        $layout_path = $_CONF['path_layout'] . 'zero';
+    } else {
+        $layout_path = $_CONF['path_layout'] . 'zero' . '/' . $path;
+    }
+
+    if (is_dir($layout_path)) {
+        $retval = $layout_path;
+    } else {
+        $retval = $_CONF['path'] . 'plugins/zero/templates';
+        if (!empty ($path)) {
+            $retval .= '/' . $path;
+        }
+    }
+
+    return $retval . '/';
+}
+
 
 ?>

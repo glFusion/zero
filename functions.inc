@@ -43,6 +43,10 @@ if (!defined('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+// MAIN ========================================================================
+
+// retrieve the configuration values for this plugin
+
 // use glFusion's config API to retrieve the configurable values and constants
 // that are specific to this plugin from the glFusion database
 
@@ -63,15 +67,12 @@ if (file_exists ($langfile)) {
 } else {
     require_once $_CONF['path'].'plugins/zero/language/english.php';
 }
+unset($langfile);
 
-// glFusion Plugin API =========================================================
+// glFusion Plugin API functions ===============================================
 
-/**
-* Called by the plugin admin to display the current plugin code version
-*
-* @return   string  version number
-*
-*/
+// returns the code version of this plugin
+
 function plugin_chkVersion_zero()
 {
     global $_ZZ_CONF;
@@ -79,12 +80,8 @@ function plugin_chkVersion_zero()
     return $_ZZ_CONF['pi_version'];
 }
 
-/**
-* Returns the URL of the plugin's icon
-*
-* @return   string      URL of the icon (max 50x50)
-*
-*/
+// returns a URL to an icon that is specific to this plugin (max: 50x50 px)
+
 function plugin_geticon_zero()
 {
     global $_CONF;
@@ -93,16 +90,12 @@ function plugin_geticon_zero()
     return $retval;
 }
 
-/**
-* Update the Links plugin
-*
-* @return   int     Number of message to display (true = generic success msg)
-*
-* plugin upgrade function - uses zero_upgrade() function in upgrade.php which
-* is located in the plugin root.  if no upgrade file is found, then we display
-* a message indicating that the upgrade function is not implemented
-*
-*/
+// permit the plugin to be upgraded
+
+// zero_upgrade() function in upgrade.php located in the plugin root.
+// if no upgrade file is found, then we display a message indicating that the
+// upgrade function is not implemented
+
 function plugin_upgrade_zero()
 {
     global $_CONF, $_TABLES, $_ZZ_CONF, $_DB_table_prefix;
@@ -111,35 +104,13 @@ function plugin_upgrade_zero()
         require_once $_CONF['path'].'plugins/zero/upgrade.php';
         return zero_upgrade();
     } else {
-        COM_errorLog("Zero plugin upgrade function not implemented");
+        COM_errorLog("Zero Plugin upgrade function not implemented");
         return 3001;
     }
 }
 
-/**
-* Returns the items for this plugin that should appear on the main menu
-*
-* NOTE: this MUST return the url/value pairs in the following format
-* $<arrayname>[<label>] = <url>
-*
-* @return   mixed   menu entry, or boolean false if disabled / hidden
-*
-*/
-function plugin_getmenuitems_zero()
-{
-    global $_CONF, $LANG_ZZ00;
-    $menuitems = array();
-    $menuitems["$LANG_ZZ00[menulabel]"] = $_CONF['site_url']."/zero/index.php";
-    return $menuitems;
-}
+// return an icon-based admin link for Command & Control, or false if no rights
 
-/**
-* This will put an option for links in the command and control block on
-* moderation.php
-*
-* @return   mixed   array(title, url, icon), or boolean false when not allowed
-*
-*/
 function plugin_cclabel_zero()
 {
     global $_CONF, $LANG_ZZ00;
@@ -148,17 +119,19 @@ function plugin_cclabel_zero()
         return array ($LANG_ZZ00['adminlabel'],
                       $_CONF['site_admin_url'] . '/plugins/zero/index.php',
                       plugin_geticon_zero());
+    } else {
+        return false;
     }
+}
 
+// this plugin does not support comments
+
+function plugin_commentsupport_zero() {
     return false;
 }
 
-/**
-* returns the administrative option for this plugin
-*
-* @return   mixed   array(title, url, num. links), or void when not allowed
-*
-*/
+// return a link to the admin page for this plugin, or void if not allowed
+
 function plugin_getadminoption_zero()
 {
     global $_CONF, $LANG_ZZ00;
@@ -171,16 +144,26 @@ function plugin_getadminoption_zero()
     }
 }
 
-/**
- * This is our simple phpblock example which is inserted into the database
- * during the installation process
- *
- */
+// return an associative array which defines a menu item which provides user
+// access to this plugin in the form: $array[<label>] = <url> or false if
+// disabled or hidden
+
+function plugin_getmenuitems_zero()
+{
+    global $_CONF, $LANG_ZZ00;
+    $menuitems = array();
+    $menuitems["$LANG_ZZ00[menulabel]"] = $_CONF['site_url']."/zero/index.php";
+    return $menuitems;
+}
+
+// phpblocks for this plugin ===================================================
+
+// define a phpblock to be associated with this plugin
+
 function phpblock_zero()
 {
     $retval = "This block does absolutely nothing.<br />";
     return $retval;
 }
-
 
 ?>

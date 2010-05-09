@@ -43,10 +43,25 @@ if (!defined ('GVERSION')) {
 global $_DB_dbms;
 
 // load the plugin-specific constants
+
 require_once $_CONF['path'].'plugins/zero/zero.php';
 
-// include the plugin-specific SQL installation script
+// load the dbms-specific installation script (although we only support MySQL at this time)
+
 require_once $_CONF['path'].'plugins/zero/sql/' . $_DB_dbms . '_install.php';
+
+// load our language file, defaults to english.  only needed if we use some of
+// these strings during installation. this is handy if we want to localize any
+// of the default data that will be pushed into the DB
+
+$langfile = $_CONF['path'] . 'plugins/zero/language/' . $_CONF['language'] . '.php';
+if (file_exists ($langfile)) {
+    require_once $langfile;
+} else {
+    require_once $_CONF['path'].'plugins/zero/language/english.php';
+}
+
+// load up the autoinstallation array
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |
@@ -100,7 +115,7 @@ $INSTALL_plugin['zero'] = array(
             'onleft' => 1, 'is_enabled' => 0),
 );
 
-// installs the data structures for this plugin
+// install the data structures for this plugin
 
 function plugin_install_zero()
 {
@@ -114,6 +129,8 @@ function plugin_install_zero()
     return (INSTALLER_install($INSTALL_plugin[$pi_name]) > 0) ? false : true;
 
 }
+
+// load the configuration data for this plugin
 
 // this function is a called back from INSTALLER_install() in lib-plugin to
 // initialize the configuration data structure for the plugin.  it performs a
@@ -129,11 +146,10 @@ function plugin_load_configuration_zero()
 
     require_once $_CONF['path'] . 'plugins/zero/install_defaults.php';
 
-    return plugin_initconfig_zero();
-
+    return plugin_initconfig_zero(); // in functions.inc
 }
 
-// this function permits the plugin to be uninstalled
+// permit the plugin to be uninstalled
 
 // it passes an array to the core code function that removes
 // tables, groups, features and php blocks from the database
@@ -142,6 +158,20 @@ function plugin_load_configuration_zero()
 
 function plugin_autouninstall_zero()
 {
+    global $_CONF;
+
+    // delete the help file
+
+    $helpfile = $_CONF['path_html'] . 'docs/zero.html';
+    if (file_exists( $helpfile )) {
+        COM_errorLog('Deleting the Zero Plugin help file');
+        if (!unlink($helpfile))
+            COM_errorLog('Error attempting to delete the Zero Plugin help file');
+    }
+    else {
+        COM_errorLog('The Zero Plugin help file did not exist.');
+    }
+
     $retval = array (
         /* give the name of the tables, without $_TABLES[] */
         'tables' => array ( 'widgets', 'gadgets'),
@@ -156,4 +186,33 @@ function plugin_autouninstall_zero()
     );
     return $retval;
 }
+
+// defines tasks to be performed immediately after installation
+
+// if this function exists, it is called from the core plugin installation code
+// immediately after installation is completed.  this function can be used to
+// install default data or perform other tasks that only need to be performed
+// once to prepare the plugin for use.  this function should return a true or
+// false result to indicate whether it was successful or not
+
+function plugin_postinstall_zero()
+{
+
+    // copy the plugin help file into the site docs directory
+
+    $helpfile = $_CONF['path'] . 'plugins/zero/docs/zero.html';
+    $dest = $_CONF['path_html'] . 'docs/zero.html';
+    if (file_exists( $helpfile )) {
+            COM_errorLog('AutoInstall: Copying Zero Plugin help file', 1);
+            if (!copy( $helpfile, $dest )) {
+                COM_errorLog('AutoInstall: Error copying Zero Plugin help file', 1);
+            }
+    }
+    else {
+        COM_errorLog('AutoInstall: The Zero Plugin help file could not be found in the plugin distribution', 1);
+    }
+
+    return true;
+}
+
 ?>

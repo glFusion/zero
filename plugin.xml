@@ -28,7 +28,7 @@
     <!-- <version> = (required) version of this plugin                                                  -->
     <!--             should be the same value as $_XX_CONF['pi_version'] in <id>.php                    -->
 
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 
     <!-- <glfusionversion> = (required) minimum revision level of glFusion to support this plugin       -->
     <!--                     should be the same value as $_XX_CONF['pi_gl_version'] in <id>.php            -->
