@@ -197,7 +197,8 @@ function plugin_autouninstall_zero()
 
 function plugin_postinstall_zero()
 {
-
+    global $_CONF;
+    
     // copy the plugin help file into the site docs directory
 
     $helpfile = $_CONF['path'] . 'plugins/zero/docs/zero.html';
