@@ -51,7 +51,7 @@ if (!defined('GVERSION')) {
 
 $_ZZ_CONF['pi_name']            = 'zero';
 $_ZZ_CONF['pi_display_name']    = 'Zero Function';
-$_ZZ_CONF['pi_version']         = '1.1.1';
+$_ZZ_CONF['pi_version']         = '1.1.2';
 $_ZZ_CONF['pi_gl_version']      = '1.2.0';
 $_ZZ_CONF['pi_url']             = 'http://www.usable-web.com';
 

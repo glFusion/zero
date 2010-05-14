@@ -81,6 +81,7 @@ function zero_upgrade()
         case '1.0.0' :
         case '1.1.0' :
         case '1.1.1' :
+        case '1.1.2' :
         default:
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version='{$_ZZ_CONF['pi_version']}',pi_gl_version='{$_ZZ_CONF['pi_gl_version']}' WHERE pi_name='zero' LIMIT 1");
             break;
