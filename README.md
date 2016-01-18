@@ -1,9 +1,9 @@
-Zero Function Plugin for the glFusion CMS
-Version: 1.1.0
+## Zero Function Plugin for the glFusion CMS
 
 
-OVERVIEW
---------
+
+### OVERVIEW
+
 Every good plugin deserves a README page!  Here is where you can communicate
 basic (and perhaps critically needed) information to the system administrator
 that is attempting to install your plugin.
@@ -18,8 +18,8 @@ extended team for all of the great suport they have lent to me and other users
 of the glFusion CMS.
 
 
-HOW TO USE
-----------
+### HOW TO USE
+
 This plugin will install as-is, however it won't do much of anything.  To
 customize this plugin for your own use, extract it, and then start by copying
 the 'zero' plugin directory to a directory name that is appropriate for your
@@ -51,29 +51,29 @@ Having trouble?  Take a look at error.log to see what's going on.
 Good luck!
 
 
-SYSTEM REQUIREMENTS
--------------------
+### SYSTEM REQUIREMENTS
+
 The Zero plugin has the following system requirements:
 
-    * PHP 4.3.3 and higher.
-    * MySQL v3.23 or newer
-    * glFusion v1.1.5 or newer
+* PHP 4.3.3 and higher.
+* MySQL v3.23 or newer
+* glFusion v1.1.5 or newer
 
 
-INSTALLATION
-------------
+### INSTALLATION
+
 The Zero Plugin uses the glFusion automated plugin installer.
 Simply upload the distribution using the glFusion plugin installer located in
 the Plugin Administration page.
 
 
-UPGRADING
----------
+### UPGRADING
+
 The upgrade process is identical to the installation process, simply upload
 the distribution from the Plugin Administration page.
 
-CONFIGURATION SETTINGS
-----------------------
+### CONFIGURATION SETTINGS
+
 The Zero Function plugin utilizes the glFusion configuration subsystem.  The
 configurable values have, like the plugin, no actual meaning but are provided
 as an example
@@ -89,14 +89,14 @@ Gadgets Per Page?
 These values are displayed when you retrieve the 'public' plugin page.
 
 
-USAGE
------
+### USAGE
+
 Well, since the Zero Plugin provides no function, there is no usage information,
 but this is where you'd put it.
 
 
-RESTRICTING ACCESS TO THE ZERO PLUGIN
-------------------------------__-----
+### RESTRICTING ACCESS TO THE ZERO PLUGIN
+
 During the installation of the Zero plugin, a glFusion group called 'Zero Users'
 is created.  The existing glFusion group 'Logged in Users' is automatically
 added to the Zero Users group, allowing all logged in site members access to
@@ -111,8 +111,8 @@ another group on your site to the Zero Users group to grant the subset of users
 access to the Zero plugin.
 
 
-LICENSE
--------
+### LICENSE
+
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
 Foundation; either version 2 of the License, or (at your option) any later
