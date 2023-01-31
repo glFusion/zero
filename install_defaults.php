@@ -1,97 +1,109 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Zero Plugin for the glFusion CMS                                         |
-// +--------------------------------------------------------------------------+
-// | install_defaults.php                                                     |
-// |                                                                          |
-// | Initial Installation Defaults used when loading the online configuration |
-// | records. These settings are only used during the initial installation    |
-// | and not referenced any more once the plugin is installed.                |
-// +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark A. Howard         mark AT usable-web DOT com                        |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +------------------------------------------------------------------------
+/**
+ * Set up the configuration items to be managed by the global configuration.
+ * These values are only used during the initial installation and are not
+ * referenced again once the plugin is installed.
+ *
+ * @author      Lee Garner <lee@leegarner.com>
+ * @author      Mark R. Evans <mark AT glfusion DOT org>
+ * @author      Mark A. Howard <mark AT usable-web DOT com>
+ * @copyright   Copyright (c) 2009-2022 The above authors
+ * @package     zero
+ * @version     v2.0.0
+ * @license     http://opensource.org/licenses/gpl-2.0.php
+ *              GNU Public License v2 or later
+ * @filesource
+ */
 
 // this file may not be retrieved directly by a browser
-
 if (!defined ('GVERSION')) {
     die('This file can not be used on its own!');
 }
 
-// zero plugin default settings
+include_once __DIR__ . '/zero.php';
+use glFusion\Log\Log;
 
-// the initial installation fefaults are used when loading the online
-// configuration records. these values are only used during the initial
-// installation and are not referenced again once the plugin is installed
+/** @var global config data */
+global $zeroConfigData, $_ZZ_CONF;
+$zeroConfigData = array(
+    array(
+        'name' => 'sg_main',        // Main config group
+        'default_value' => NULL,
+        'type' => 'subgroup',
+        'subgroup' => 0,
+        'fieldset' => 0,
+        'selection_array' => NULL,
+        'sort' => 0,
+        'set' => true,
+        'group' => $_ZZ_CONF['pi_name'],
+    ),
+    array(
+        'name' => 'fs_main',        // Main field set
+        'default_value' => NULL,
+        'type' => 'fieldset',
+        'subgroup' => 0,
+        'fieldset' => 0,
+        'selection_array' => NULL,
+        'sort' => 0,
+        'set' => true,
+        'group' => $_ZZ_CONF['pi_name'],
+    ),
+    array(
+        'name' => 'widgets_per_page',   // config item name
+        'default_value' => 4,           // default value
+        'type' => 'text',               // text, select, etc.
+        'subgroup' => 0,                // in the main subgrup
+        'fieldset' => 0,                // in the main fieldset
+        'selection_array' => 0,         // language array, n/a for text vals
+        'sort' => 10,                   // order of appearance
+        'set' => true,                  // true to set the value
+        'group' => $_ZZ_CONF['pi_name'],    // plugin name to group conf vals
+    ),
+    array(
+        'name' => 'gadgets_per_page',
+        'default_value' => 8,           // default value
+        'type' => 'text',
+        'subgroup' => 0,
+        'fieldset' => 0,
+        'selection_array' => 0,
+        'sort' => 20,
+        'set' => true,
+        'group' => $_ZZ_CONF['pi_name'],
+    ),
+    array(
+        'name' => 'show_in_profile',    // maybe something is shown in profiles
+        'default_value' => 0,           // default value = "No"
+        'type' => 'select',             // this is a selection var
+        'subgroup' => 0,
+        'fieldset' => 0,
+        'selection_array' => 0,         // this is the $LANG_configSelect key
+        'sort' => 30,
+        'set' => true,
+        'group' => $_ZZ_CONF['pi_name'],
+    ),
+);
 
-global $_ZZ_CONF_DEFAULT;
-$_ZZ_CONF_DEFAULT = array();
 
-$_ZZ_CONF_DEFAULT['widgets_per_page'] = 4;
-$_ZZ_CONF_DEFAULT['gadgets_per_page'] = 8;
-
-// initialize zero plugin configuration
-
-// this function reates the database entries for the configuation entries
-// that are specific to this plugin if they don't already exist.  this function
-// is called primarily from two places:
-//
-// 1) from autoinstall.php, in the plugin_load_configuration_xxxx function, to
-//    return the default config values to the plugin installation function
-//
-// 2) from upgrade.php, if the version upgrade is moving what was static config
-//    data (in a config.php, for example) into the config database
-
-function plugin_initconfig_zero()
+/**
+ * Initialize the plugin configuration.
+ * Creates the config items from the array given above.
+ *
+ * @param   integer $group_id   Not used
+ * @return  boolean     True: success; False: an error occurred
+ */
+function plugin_initconfig_zero($group_id = 0)
 {
-    global $_ZZ_CONF, $_ZZ_CONF_DEFAULT;
-
-    // this merges the config values with default override values
-
-    if (is_array($_ZZ_CONF) && (count($_ZZ_CONF) > 1)) {
-        $_ZZ_CONF_DEFAULT = array_merge($_ZZ_CONF_DEFAULT, $_ZZ_CONF);
-    }
-
-    // get the configuration instance, and create the zero plugin
-    // configuration group if it does not exist.  note that this is where
-    // the decision is made to use the default values
-    // the full reference to using the configuration class can be found here:
-    // http://www.glfusion.org/wiki/doku.php/glfusion:development:configsystem#configuration_class_function_reference
+    global $zeroConfigData;
 
     $c = config::get_instance();
     if (!$c->group_exists('zero')) {
-
-        $c->add('sg_main', NULL, 'subgroup', 0, 0, NULL, 0, true, 'zero');
-        $c->add('zero_general', NULL, 'fieldset', 0, 0, NULL, 0, true, 'zero');
-
-        $c->add('widgets_per_page',$_ZZ_CONF_DEFAULT['widgets_per_page'], 'text',
-                0, 0, NULL, 10, true, 'zero');
-
-        $c->add('gadgets_per_page',$_ZZ_CONF_DEFAULT['gadgets_per_page'], 'text',
-                0, 0, NULL, 20, true, 'zero');
+        USES_lib_install();
+        foreach ($zeroConfigData AS $cfgItem) {
+            _addConfigItem($cfgItem);
+        }
+    } else {
+        COM_errorLog(__FUNCTION__ . ': Zero config group already exists.');
+        return false;
     }
     return true;
 }
-
-?>
