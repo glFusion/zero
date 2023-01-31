@@ -1,0 +1,18 @@
+{# begin {templatelocation} #}
+<h1>{$LANG_ZZ00['adminlabel']}</h1>
+<div class="uk-alert">
+	<p>{$LANG_ZZ00['adminpage1']}</p>
+	<p>{$LANG_ZZ00['adminpage2']}</p>
+</div>
+<ul>
+	<li>{$LANG_ZZ00['widgets_per_page']}: {widgets_per_page}</li>
+	<li>{$LANG_ZZ00['gadgets_per_page']}: {gadgets_per_page}</li>
+	<li>{$LANG_ZZ00['showing_in_profile']}:
+{!if show_in_profile}
+		{$LANG_ZZ00['yes']}
+{!else}
+		{$LANG_ZZ00['no']}
+{!endif}
+	</li>
+</ul>
+{# end {templatelocation} #}

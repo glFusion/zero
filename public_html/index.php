@@ -1,63 +1,69 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Zero Plugin for the glFusion CMS                                         |
-// +--------------------------------------------------------------------------+
-// | index.php                                                                |
-// |                                                                          |
-// | Zero plugin main index page                                              |
-// +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark A. Howard         mark AT usable-web DOT com                        |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-
-// this file contains the code that non-administrative users may use
+/**
+ * Guest-facing entry point for the plugin.
+ *
+ * @author      Lee Garner <lee@leegarner.com>
+ * @author      Mark R. Evans <mark AT glfusion DOT org>
+ * @author      Mark A. Howard <mark AT usable-web DOT com>
+ * @copyright   Copyright (c) 2009-2022 The above authors
+ * @package     zero
+ * @version     v2.0.0
+ * @license     http://opensource.org/licenses/gpl-2.0.php
+ *              GNU Public License v2 or later
+ * @filesource
+ */
 
 require_once '../lib-common.php';
 
-// perhaps the plugin has been uploaded, but not yet installed.  if this is the
-// case, then we really should not be using it.  return a 404 error to the user
-
+// Perhaps the plugin has been uploaded, but not yet installed.
+// If this is the case, then we really should not be using it.
+// Simply return a 404.
 if (!in_array('zero', $_PLUGINS)) {
     COM_404();
     exit;
 }
 
-// load the plugin-specific functions, as well as a basic user check.  anonymous
-// users will be sent to the login page.  users in the 'Zero Users' group will
-// see a short message.  see the code at the beginning of lib-zero.php
+$content = '';      // variable to accumulate content for display
 
-require_once $_CONF['path'].'plugins/zero/include/lib-zero.php';
+// Find out what action was requested.
+// $_POST gets priority, followed by $_GET.
+$expected = array(
+    'widgets', 'gadgets',
+);
+$action = '';
+foreach($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+        $actionval = $_POST[$provided];
+        break;
+    } elseif (isset($_GET[$provided])) {
+        $action = $provided;
+        $actionval = $_GET[$provided];
+        break;
+    }
+}
 
-// start of main code
+switch ($action) {
+case 'widgets':
+    $content .= 'Showing widget stuff';
+    break;
+case 'gadgets':
+    $contetn .= 'Showing gadget stuff';
+    break;
+default:
+    // Showing default index page
+    $T = new Template($_CONF['path'] . '/plugins/zero/templates');
+    $T->set_file('view', 'index.thtml');
+    $T->set_var(array(
+        'widgets_per_page' => $_ZZ_CONF['widgets_per_page'],
+        'gadgets_per_page' => $_ZZ_CONF['gadgets_per_page'],
+        'show_in_profile' => $_ZZ_CONF['show_in_profile'],
+    ) );
+    $T->parse('output', 'view');
+    $content .= $T->finish($T->get_var('output'));
+    break;
+}
 
-$display = COM_siteHeader('menu',$LANG_ZZ00['title'])
-    . '<strong>' . $LANG_ZZ00['title'].'</strong>'
-    . $LANG_ZZ00['publicpage']
-    . $LANG_ZZ00['widgets'] . $_ZZ_CONF['widgets_per_page'].'<br />'
-    . $LANG_ZZ00['gadgets'] . $_ZZ_CONF['gadgets_per_page'].'<br />'
-    . COM_siteFooter();
-
-echo $display;
-
-?>
+echo COM_siteHeader('menu',$LANG_ZZ00['title']);
+echo $content;
+echo COM_siteFooter();

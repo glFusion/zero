@@ -1,64 +1,41 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Zero Plugin for the glFusion CMS                                         |
-// +--------------------------------------------------------------------------+
-// | autoinstall.php                                                          |
-// |                                                                          |
-// | glFusion Auto Installer module                                           |
-// +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark A. Howard         mark AT usable-web DOT com                        |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+ * Automatic installation functions for the plugin.
+ *
+ * @author      Lee Garner <lee@leegarner.com>
+ * @author      Mark R. Evans <mark AT glfusion DOT org>
+ * @author      Mark A. Howard <mark AT usable-web DOT com>
+ * @copyright   Copyright (c) 2009-2022 The above authors
+ * @package     zero
+ * @version     v2.0.0
+ * @license     http://opensource.org/licenses/gpl-2.0.php
+ *              GNU Public License v2 or later
+ * @filesource
+ */
 
-// this file may not be retrieved directly by a browser
-
+// This file may not be retrieved directly by a browser.
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-// glFusion currently only supports mySQL at the time of this writing, however
-// this global can in the future allow for multiple database engine types
+// TlFusion currently only supports mySQL at the time of this writing.
+// However this global can in the future allow for multiple database engine types.
+global $_DB_dbms, $_CONF;
 
-global $_DB_dbms;
+// Load the plugin-specific constants.
+require_once __DIR__ . '/zero.php';
 
-// load the plugin-specific constants
+// Load the dbms-specific installation script (although we only support MySQL at this time).
+require_once __DIR__ . '/sql/' . $_DB_dbms . '_install.php';
 
-require_once $_CONF['path'].'plugins/zero/zero.php';
-
-// load the dbms-specific installation script (although we only support MySQL at this time)
-
-require_once $_CONF['path'].'plugins/zero/sql/' . $_DB_dbms . '_install.php';
-
-// load our language file, defaults to english.  only needed if we use some of
-// these strings during installation. this is handy if we want to localize any
-// of the default data that will be pushed into the DB
-
-$langfile = $_CONF['path'] . 'plugins/zero/language/' . $_CONF['language'] . '.php';
+// Load our language file, defaults to english.
+// Only needed if we use some of these strings during installation.
+// This is handy if we want to localize any of the default data that will be pushed into the DB.
+$langfile = __DIR__ . '/language/' . $_CONF['language'] . '.php';
 if (file_exists ($langfile)) {
     require_once $langfile;
 } else {
-    require_once $_CONF['path'].'plugins/zero/language/english.php';
+    require_once __DIR__ . '/language/english_utf-8.php';
 }
 
 // load up the autoinstallation array
@@ -85,38 +62,104 @@ if (file_exists ($langfile)) {
 //  6) a php_block which is to be used with this plugin, initially disabled
 
 $INSTALL_plugin['zero'] = array(
-    'installer' => array('type' => 'installer', 'version' => '1', 'mode' => 'install'),
-    'plugin' => array('type' => 'plugin', 'name' => $_ZZ_CONF['pi_name'],
-            'ver' => $_ZZ_CONF['pi_version'], 'gl_ver' => $_ZZ_CONF['pi_gl_version'],
-            'url' => $_ZZ_CONF['pi_url'], 'display' => $_ZZ_CONF['pi_display_name']),
-
-    array('type' => 'table', 'table' => $_TABLES['widgets'], 'sql' => $_SQL['widgets']),
-    array('type' => 'table', 'table' => $_TABLES['gadgets'], 'sql' => $_SQL['gadgets']),
-
-    array('type' => 'group', 'group' => 'Zero Admin', 'desc' => 'Administrators of the Zero Plugin',
-            'variable' => 'admin_group_id', 'admin' => true, 'addroot' => true),
-    array('type' => 'group', 'group' => 'Zero Users', 'desc' => 'Users of the Zero Plugin',
-            'variable' => 'user_group_id', 'addroot' => true),
-
-    array('type' => 'feature', 'feature' => 'zero.edit', 'desc' => 'Ability to administer the Zero plugin',
-            'variable' => 'admin_feature_id'),
-    array('type' => 'feature', 'feature' => 'zero.view', 'desc' => 'Zero User',
-            'variable' => 'user_feature_id'),
-
-    array('type' => 'mapping', 'group' => 'admin_group_id', 'feature' => 'admin_feature_id',
-            'log' => 'Adding Zero feature to the Zero admin group'),
-    array('type' => 'mapping', 'group' => 'user_group_id', 'feature' => 'user_feature_id',
-            'log' => 'Adding Zero feature to the Zero user group'),
-
-    array('type' => 'addgroup','parent_grp' => 'Zero Users', 'child_grp' => 'Logged-in Users'),
-
-    array('type' => 'block','type' => 'block', 'name' => 'zero', 'title' => 'Zero Function',
-            'phpblockfn' => 'phpblock_zero', 'block_type' => 'phpblock', 'group_id' => 'admin_group_id',
-            'onleft' => 1, 'is_enabled' => 0),
+    'installer' => array(
+        'type' => 'installer',
+        'version' => '1',
+        'mode' => 'install',
+    ),
+    'plugin' => array(
+        'type' => 'plugin',
+        'name' => $_ZZ_CONF['pi_name'],
+        'ver' => $_ZZ_CONF['pi_version'],
+        'gl_ver' => $_ZZ_CONF['pi_gl_version'],
+        'url' => $_ZZ_CONF['pi_url'],
+        'display' => $_ZZ_CONF['pi_display_name'],
+    ),
+    array(
+        'type' => 'table',
+        'table' => $_TABLES['widgets'],
+        'sql' => $_SQL['widgets'],
+    ),
+    array(
+        'type' => 'table',
+        'table' => $_TABLES['gadgets'],
+        'sql' => $_SQL['gadgets'],
+    ),
+    array(
+        'type' => 'feature',
+        'feature' => 'zero.admin',
+        'desc' => 'Ability to administer the Zero plugin',
+        'variable' => 'admin_feature_id',   // ties the feature back to the admin group
+    ),
+    array(
+        'type' => 'feature',
+        'feature' => 'zero.user',
+        'desc' => 'Zero User',
+        'variable' => 'user_feature_id',
+    ),
+    array(
+        'type' => 'mapping',
+        'findgroup' => 'Root',       // Root user gets the feature
+        'feature' => 'admin_feature_id',
+        'log' => 'Adding admin feature to the Root group',
+    ),
+    array(
+        'type' => 'mapping',
+        'findgroup' => 'Logged-In Users',   // all users can receive cards
+        'feature' => 'user_feature_id',
+        'log' => 'Adding user feature to the logged-in users group',
+    ),
+    // Below is the legacy method of creating new groups for admins and users.
+    // Using existing groups and mapping the features is recommended.
+    /*array(
+        'type' => 'group',              // creating a group
+        'group' => 'Zero Admin',        // name of the group
+        'desc' => 'Administrators of the Zero Plugin',  // group description
+        'variable' => 'admin_group_id', // var to assign the feature (below)
+        'admin' => true,                // this is an admin group
+        'addroot' => true,              // add the "root" user to the group
+    ),
+    array(
+        'type' => 'group',
+        'group' => 'Zero Users',
+        'desc' => 'Users of the Zero Plugin',
+        'variable' => 'user_group_id',
+        'addroot' => true,
+    ),
+    array(
+        'type' => 'block',                  // create a PHP block
+        'name' => 'zero',
+        'title' => 'Zero Function',
+        'phpblockfn' => 'phpblock_zero',
+        'block_type' => 'phpblock',
+        'group_id' => 'admin_group_id',
+        'onleft' => 1,
+        'is_enabled' => 0,
+    ),
+    array(
+        'type' => 'mapping',                // maps the features to the created groups
+        'group' => 'admin_group_id',
+        'feature' => 'admin_feature_id',
+        'log' => 'Adding Zero feature to the Zero admin group',
+    ),
+    array(
+        'type' => 'mapping',
+        'group' => 'user_group_id',
+        'feature' => 'user_feature_id',
+        'log' => 'Adding Zero feature to the Zero user group',
+    ),
+    array(
+        'type' => 'addgroup',               // Add logged-in uses to our group
+        'parent_grp' => 'Zero Users',
+        'child_grp' => 'Logged-in Users',
+    ),*/
 );
 
-// install the data structures for this plugin
-
+/**
+ * Install the data structures for this plugin.
+ *
+ * @return  boolean     True on success, False on error
+ */
 function plugin_install_zero()
 {
     global $INSTALL_plugin, $_ZZ_CONF;
@@ -124,7 +167,6 @@ function plugin_install_zero()
     $pi_name            = $_ZZ_CONF['pi_name'];
     $pi_display_name    = $_ZZ_CONF['pi_display_name'];
     $pi_version         = $_ZZ_CONF['pi_version'];
-
     COM_errorLog("Attempting to install the $pi_name v$pi_version ($pi_display_name) plugin");
     return (INSTALLER_install($INSTALL_plugin[$pi_name]) > 0) ? false : true;
 
@@ -149,59 +191,48 @@ function plugin_load_configuration_zero()
     return plugin_initconfig_zero(); // in functions.inc
 }
 
-// permit the plugin to be uninstalled
 
-// it passes an array to the core code function that removes
-// tables, groups, features and php blocks from the database
-// this code can perform special actions that cannot be oreseen by the core code
-// (interactions with other plugins for example)
-
+/**
+ * Specify what gets removed when the plugin is uninstalled.
+ * This must include all of the items installed above (tables, groups, etc.)
+ * This code can also perform special actions that cannot be oreseen by the
+ * core code (interactions with other plugins for example).
+ *
+ * @return  array   Array of elements to be removed.
+ */
 function plugin_autouninstall_zero()
 {
-    global $_CONF;
-
-    // delete the help file
-
-    $helpfile = $_CONF['path_html'] . 'docs/zero.html';
-    if (file_exists( $helpfile )) {
-        COM_errorLog('Deleting the Zero Plugin help file');
-        if (!unlink($helpfile))
-            COM_errorLog('Error attempting to delete the Zero Plugin help file');
-    }
-    else {
-        COM_errorLog('The Zero Plugin help file did not exist.');
-    }
-
     $retval = array (
-        /* give the name of the tables, without $_TABLES[] */
+        // Give the name of the tables, without $_TABLES[].
         'tables' => array ( 'widgets', 'gadgets'),
-        /* give the full name of the group, as in the db */
-        'groups' => array('Zero Admin','Zero Users'),
-        /* give the full name of the feature, as in the db */
-        'features' => array('zero.edit','zero.user'),
-        /* give the full name of the block, including 'phpblock_', etc */
-        'php_blocks' => array( 'phpblock_zero' ),
-        /* give all vars with their name */
+        // Give the full name of the group, as in the db.
+        //'groups' => array('Zero Admin','Zero Users'),
+        // Give the full name of the feature, as in the db
+        'features' => array('zero.admin','zero.user'),
+        // Give the full name of the block function.
+        'php_blocks' => array('phpblock_zero'),
+        // Give all vars saved in gl_vars, if any.
         'vars'=> array()
     );
     return $retval;
 }
 
-// defines tasks to be performed immediately after installation
 
-// if this function exists, it is called from the core plugin installation code
-// immediately after installation is completed.  this function can be used to
-// install default data or perform other tasks that only need to be performed
-// once to prepare the plugin for use.  this function should return a true or
-// false result to indicate whether it was successful or not
-
+/**
+ * Define tasks to be performed immediately after installation.
+ * If this function exists, it is called from the core plugin installation code
+ * immediately after installation is completed.  this function can be used to
+ * install default data or perform other tasks that only need to be performed
+ * once to prepare the plugin for use.
+ *
+ * @return boolean      True on success, False on error
+ */
 function plugin_postinstall_zero()
 {
-    global $_CONF;
-    
-    // copy the plugin help file into the site docs directory
-
-    $helpfile = $_CONF['path'] . 'plugins/zero/docs/zero.html';
+    // Copy the plugin help file into the site docs directory.
+    // This is an example, the help file(s) are normally under
+    // public_html/plugin/docs/ and copied automatically during installation.
+    /*$helpfile = $_CONF['path'] . 'plugins/zero/docs/zero.html';
     $dest = $_CONF['path_html'] . 'docs/zero.html';
     if (file_exists( $helpfile )) {
             COM_errorLog('AutoInstall: Copying Zero Plugin help file', 1);
@@ -211,9 +242,7 @@ function plugin_postinstall_zero()
     }
     else {
         COM_errorLog('AutoInstall: The Zero Plugin help file could not be found in the plugin distribution', 1);
-    }
-
+        return false;
+    }*/
     return true;
 }
-
-?>

@@ -1,54 +1,50 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Zero Plugin for the glFusion CMS                                         |
-// +--------------------------------------------------------------------------+
-// | mysql_install.php                                                        |
-// |                                                                          |
-// | Contains all the SQL necessary to install the Zero plugin                |
-// +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark A. Howard         mark AT usable-web DOT com                        |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+ * SQL statements to create and update tables.
+ *
+ * @author      Lee Garner <lee@leegarner.com>
+ * @author      Mark R. Evans <mark AT glfusion DOT org>
+ * @author      Mark A. Howard <mark AT usable-web DOT com>
+ * @copyright   Copyright (c) 2009-2022 The above authors
+ * @package     zero
+ * @version     v2.0.0
+ * @license     http://opensource.org/licenses/gpl-2.0.php
+ *              GNU Public License v2 or later
+ * @filesource
+ */
 
 // this file may not be retrieved directly by a browser
-
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-// this code creates the plugin-specific tables.  these are just examples
-
+// This code creates the plugin-specific tables.
+// The TYPE=MyISAM is required and will be changed to TYPE=InnoDB if appropriate.
+$_SQL = array();
 $_SQL['widgets'] = "CREATE TABLE {$_TABLES['widgets']} (
   widget_id mediumint(8) NOT NULL auto_increment,
   widget_desc varchar(64) NOT NULL default '',
   PRIMARY KEY (widget_id)
-) TYPE=MyISAM;";
-
+) TYPE=MyISAM";
 $_SQL['gadgets'] = "CREATE TABLE {$_TABLES['gadgets']} (
   gadget_id mediumint(8) NOT NULL auto_increment,
   gadget_desc varchar(64) NOT NULL default '',
   PRIMARY KEY (gadget_id)
-) TYPE=MyISAM;";
+) TYPE=MyISAM";
 
-?>
+// This is where the upgrade SQL is specified.
+// For example, assume that prior to version 1.0.0 only the "widgets"
+// table was used, and 1.0.0 now has the "gadgets" table.
+// Each version's statements are simply executed in order, so add any
+// "alter table", "drop", "create" lines here.
+// If data is to be updated via "insert" or "update", first check some value
+// such as whether a column exists to be sure the upgrade does not overwrite
+// data.
+$_ZZ_UPGRADE = array(
+    '1.0.0' => array(
+        "CREATE TABLE {$_TABLES['gadgets']} (
+          gadget_id mediumint(8) NOT NULL auto_increment primary key,
+          gadget_desc varchar(64) NOT NULL default '',
+        ) TYPE=MyISAM",
+    ),
+);

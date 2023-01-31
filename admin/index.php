@@ -1,66 +1,80 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Zero Plugin for the glFusion CMS                                         |
-// +--------------------------------------------------------------------------+
-// | index.php                                                                |
-// |                                                                          |
-// | Zero plugin administration page                                          |
-// +--------------------------------------------------------------------------+
-// | $Id:: index.php 11 2010-04-28 21:11:32Z usableweb                       $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark A. Howard         mark AT usable-web DOT com                        |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-
+/**
+ * Entry point to the plugin administration.
+ *
+ * @author      Lee Garner <lee@leegarner.com>
+ * @author      Mark R. Evans <mark AT glfusion DOT org>
+ * @author      Mark A. Howard <mark AT usable-web DOT com>
+ * @copyright   Copyright (c) 2009-2022 The above authors
+ * @package     zero
+ * @version     v2.0.0
+ * @license     http://opensource.org/licenses/gpl-2.0.php
+ *              GNU Public License v2 or later
+ * @filesource
+ */
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
 
-// load the plugin-specific functions, as well as a basic user check.  anonymous
-// users will be sent to the login page.  users in the 'Zero Users' group will
-// see a short message.  see the code at the beginning of lib-zero.php
+$content = '';      // to accumulate content and display at the end
 
-require_once $_CONF['path'].'plugins/zero/include/lib-zero.php';
-
-$display = '';
-
-if(!SEC_hasRights('zero.edit')) {
-    $display .= COM_siteHeader ('menu', $MESSAGE[30]);
-    $display .= COM_startBlock ($MESSAGE[30], '',
-                                COM_getBlockTemplate ('_msg_block', 'header'));
-    $display .= $LANG_ZZ00['accessdenied'];
-    $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
-    $display .= COM_siteFooter ();
+// Unauthorized users just get a 404 message, better for security
+// than admitting the admin page exists.
+if (!SEC_hasRights('zero.admin')) {
     COM_accessLog ("User {$_USER['username']} tried to illegally access the zero administration screen.");
-    echo $display;
-    exit;
+    COM_404();
 }
 
-$display = COM_siteHeader('menu',$LANG_ZZ00['title'])
-    . '<strong>' . $LANG_ZZ00['title'].'</strong>'
-    . $LANG_ZZ00['adminpage']
-    . $LANG_ZZ00['widgets'] . $_ZZ_CONF['widgets_per_page'].'<br />'
-    . $LANG_ZZ00['gadgets'] . $_ZZ_CONF['gadgets_per_page'].'<br />'
-    . COM_siteFooter();
+// Define the base admin URL in one place
+$admin_url = $_CONF['site_admin_url'] . '/plugins/zero/index.php';
 
-echo $display;
+// Find out what action was requested.
+// $_POST gets priority, followed by $_GET.
+$expected = array(
+    'edititem', 'saveitem', 'deleteitem',
+);
+$action = '';
+foreach($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+        $actionval = $_POST[$provided];
+        break;
+    } elseif (isset($_GET[$provided])) {
+        $action = $provided;
+        $actionval = $_GET[$provided];
+        break;
+    }
+}
 
-?>
+switch ($action) {
+case 'edititem':
+    $content .= 'Here is the item edit form.';
+    break;
+
+case 'saveitem':
+    // Save the item with ID `$actionval` and refresh back to the admin page.
+    echo COM_refresh($admin_url);
+    break;
+
+case 'deleteitem':
+    // Delete the item with ID `$actionval` and refresh back to the admin page.
+    echo COM_refresh($admin_url);
+    break;
+
+case 'listitems':
+default:
+    // Showing default admin content.
+    $T = new Template($_CONF['path'] . '/plugins/zero/templates/admin');
+    $T->set_file('view', 'index.thtml');
+    $T->set_var(array(
+        'widgets_per_page' => $_ZZ_CONF['widgets_per_page'],
+        'gadgets_per_page' => $_ZZ_CONF['gadgets_per_page'],
+        'show_in_profile' => $_ZZ_CONF['show_in_profile'],
+    ) );
+    $T->parse('output', 'view');
+    $content .= $T->finish($T->get_var('output'));
+    break;
+}
+
+echo COM_siteHeader('menu', $LANG_ZZ00['title']);
+echo $content;
+echo COM_siteFooter();

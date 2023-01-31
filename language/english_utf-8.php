@@ -1,73 +1,59 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Zero Plugin for the glFusion CMS                                         |
-// +--------------------------------------------------------------------------+
-// | english_utf-8.php                                                        |
-// |                                                                          |
-// | English language file                                                    |
-// +--------------------------------------------------------------------------+
-// | $Id::                                                                   $|
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009 by the following authors:                             |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark A. Howard         mark AT usable-web DOT com                        |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+ * English language file for the Zero plugin.
+ *
+ * @author      Lee Garner <lee@leegarner.com>
+ * @author      Mark R. Evans <mark AT glfusion DOT org>
+ * @author      Mark A. Howard <mark AT usable-web DOT com>
+ * @copyright   Copyright (c) 2009-2022 The above authors
+ * @package     zero
+ * @version     v2.0.0
+ * @license     http://opensource.org/licenses/gpl-2.0.php
+ *              GNU Public License v2 or later
+ * @filesource
+ */
 
 // this file may not be retrieved directly by a browser
-
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-// use this file to localize your plugin
-
+// General language strings referenced througout the plugin.
 $LANG_ZZ00 = array (
     'plugin'            => 'zero',
     'title'             => 'Zero Function',
     'menulabel'         => 'Zero',
     'adminlabel'        => 'Zero Admin',
     'error'             => ' Error',
-    'widgets'           => 'Widgets per Page: ',
-    'gadgets'           => 'Gadgets per Page: ',
+    'widgets_per_page'  => 'Widgets per Page',
+    'gadgets_per_page'  => 'Gadgets per Page',
     'accessdenied'      => 'Sorry, you do not have access to the Zero Plugin Administration page.',
-    'publicpage'        => "<br /><br />This is the Zero Plugin public index page.<br /><br />This would be the initial 'home page' that is displayed for non-admin users of your plugin.<br /><br />",
-    'adminpage'         => "<br /><br />This is the Zero Plugin administrative page.<br /><br />This is the page that would contain what is needed for administrators to manage this plugin.<br /><br/>"
+    'publicpage1'       => 'This is the Zero Plugin public index page.',
+    'publicpage2'       => "This would be the initial 'home page' that is displayed for non-admin users of your plugin.",
+    'adminpage1'        => "This is the Zero Plugin administrative page.",
+    'adminpage2'        => "This is the page that would contain what is needed for administrators to manage this plugin.",
+    'showing_in_profile' => 'Showing in user profile',
+    'yes' => 'Yes',
+    'no' => 'No',
 );
 
 // configuration UI localization
-
 $LANG_configsections['zero'] = array(
-    'label'                 => 'Zero Function',
-    'title'                 => 'Zero Function Configuration'
-);
-$LANG_confignames['zero'] = array(
-    'widgets_per_page'     => 'Widgets per page',
-    'gadgets_per_page'     => 'Gadgets per page',
+    'label'             => 'Zero Function',
+    'title'             => 'Zero Function Configuration'
 );
 $LANG_configsubgroups['zero'] = array(
-    'sg_main'               => 'Main Settings',
+    'sg_main'           => 'Main Settings',
 );
-
 $LANG_fs['zero'] = array(
-    'zero_general'            => 'Zero Function General Settings',
+    'fs_main'           => 'Zero Function General Settings',
 );
-
-?>
+$LANG_confignames['zero'] = array(
+    'widgets_per_page'  => 'Widgets per page',
+    'gadgets_per_page'  => 'Gadgets per page',
+    'show_in_profile'   => 'Show in user profile?',
+);
+// Config selection options
+$LANG_configSelect['zero'] = array(
+    0 => array(1 => 'Yes', 0 => 'No'),
+);
