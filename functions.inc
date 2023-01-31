@@ -174,6 +174,32 @@ function plugin_getmenuitems_zero()
 
 
 /**
+ * Get the URL to the configuration help file.
+ *
+ * @param   string  $option     Config option selected
+ * @param   string  $doclang    Document language
+ * @return  string              URL to document
+ */
+function plugin_getconfigelementhelp_zero($option, $doclang='english')
+{
+    global $_CONF;
+
+    $file = 'config.html';
+    $doc_path = "{$_CONF['path_html']}/zero/docs/$doclang/";
+    $doc_url = '';
+
+    if (!is_file($doc_path . $file)) {
+        $doclang = 'english';
+    }
+    $doc_url = "{$_CONF['site_url']}/zero/docs/$doclang/$file";
+    if (!empty($option)) {
+        $doc_url .= '#desc_' . $option;
+    }
+    return array($doc_url, 0);
+}
+
+
+/**
  * PHP block function.
  * These create the blocks for the left and right sides.
  * They must be named with the `phpblock_` prefix and should include the
